@@ -39,42 +39,54 @@ const EYES_COLOR_WIZARDS = [
   'green'
 ];
 
-const SIMILAR_WIZARDS = [];
-const SIMILAR_WIZARD_TEMLATE = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-const WIZARDS_FRAGMET = document.createDocumentFragment();
-const SETUP_SIMILAR_LIST = document.querySelector('.setup-similar-list');
+const MAX_COUNT = 4;
+const similarWizards = [];
+const wizardsFragment = document.createDocumentFragment();
+const similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+const setupSimilarList = document.querySelector('.setup-similar-list');
+
+function getRandom(min, max) {
+  let x = Math.floor(Math.random() * (max - min) + min);
+  return x;
+};
 
 const createSimilarWizards = function (name, surname, coatColor, eyesColor) {
   let wizard = {};
-  wizard.name = `${name} ${surname}`;
-  wizard.coatColor = `${coatColor}`;
-  wizard.eyesColor = `${eyesColor}`;
+  wizard.name = `${name[getRandom(0, name.length - 1)]} ${surname[getRandom(0, surname.length - 1)]}`;
+  wizard.coatColor = `${coatColor[getRandom(0, coatColor.length - 1)]}`;
+  wizard.eyesColor = `${eyesColor[getRandom(0, eyesColor.length - 1)]}`;
 
   return wizard;
 };
 
 const renderWizards = function (wizard) {
-  let wizardFragment = SIMILAR_WIZARD_TEMLATE.cloneNode(true);
-  SIMILAR_WIZARD_TEMLATE.querySelector('.setup-similar-label').textContent = wizard.name;
-  SIMILAR_WIZARD_TEMLATE.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  SIMILAR_WIZARD_TEMLATE.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+  let wizardFragment = similarWizardTemplate.cloneNode(true);
+  similarWizardTemplate.querySelector('.setup-similar-label').textContent = wizard.name;
+  similarWizardTemplate.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  similarWizardTemplate.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
 
   return wizardFragment;
+};
+
+const addWizards = () => {
+  for (let i = 0; i < MAX_COUNT; i++) {
+    similarWizards[i] = createSimilarWizards(NAMES_WIZARDS, SURNAMES_WIZARDS, COATS_COLOR_WIZARDS, EYES_COLOR_WIZARDS);
+  }
+};
+
+const pasteWizards = () => {
+  for (let i = 0; i < similarWizards.length; i++) {
+    wizardsFragment.appendChild(renderWizards(similarWizards[i]));
+  }
 };
 
 const fillBlock = function (wrap, content) {
   wrap.appendChild(content);
 };
 
-for (let i = 0; i < 4; i++) {
-  SIMILAR_WIZARDS[i] = createSimilarWizards(NAMES_WIZARDS[i], SURNAMES_WIZARDS[i], COATS_COLOR_WIZARDS[i], EYES_COLOR_WIZARDS[i]);
-};
-
-for (let i = 0; i < SIMILAR_WIZARDS.length; i++) {
-  WIZARDS_FRAGMET.appendChild(renderWizards(SIMILAR_WIZARDS[i]));
-};
-
-fillBlock(SETUP_SIMILAR_LIST, WIZARDS_FRAGMET);
+addWizards();
+pasteWizards();
+fillBlock(setupSimilarList, wizardsFragment);
 
 document.querySelector('.setup').classList.remove('hidden');
 document.querySelector('.setup-similar').classList.remove('hidden');
