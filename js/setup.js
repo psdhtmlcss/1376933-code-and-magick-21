@@ -39,11 +39,30 @@ const EYES_COLOR_WIZARDS = [
   'green'
 ];
 
+const FIREBALL_COLOR_WIZARDS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
 const MAX_COUNT = 4;
 const similarWizards = [];
 const wizardsFragment = document.createDocumentFragment();
 const similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 const setupSimilarList = document.querySelector('.setup-similar-list');
+const setup = document.querySelector('.setup');
+const setupOpen = document.querySelector('.setup-open');
+const setupOpenIcon = setupOpen.querySelector('.setup-open-icon');
+const setupUserName = setup.querySelector('.setup-user-name');
+const setupClose = setup.querySelector('.setup-close');
+const setupWizardCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
+const setupWizardEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
+const setupWizardFireballColor = setup.querySelector('.setup-fireball-wrap');
+const inputCoatColor = setup.querySelector('input[name="coat-color"]');
+const inputEyesColor = setup.querySelector('input[name="eyes-color"]');
+const inputFireballColor = setup.querySelector('input[name="fireball-color"]');
 
 function getRandom(min, max) {
   let x = Math.floor(Math.random() * (max - min) + min);
@@ -88,6 +107,65 @@ addWizards();
 pasteWizards();
 fillBlock(setupSimilarList, wizardsFragment);
 
-document.querySelector('.setup').classList.remove('hidden');
+// Открытие/закрытие окна
+const openModal = () => {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onKeyPressEscape);
+  document.addEventListener('keydown', onKeyPressEnter);
+};
+
+const closeModal = () => {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onKeyPressEscape);
+  document.removeEventListener('keydown', onKeyPressEnter);
+};
+
+const onKeyPressEnter = (evt) => {
+  if (evt.key === 'Enter' && evt.target === setupClose) {
+    evt.preventDefault();
+    closeModal();
+  }
+};
+
+const onKeyPressEscape = (evt) => {
+  if (evt.key === 'Escape' && evt.target !== setupUserName) {
+    evt.preventDefault();
+    closeModal();
+  }
+};
+
+document.addEventListener('keydown', function(evt) {
+  if (evt.key === 'Enter' && evt.target === setupOpenIcon) {
+    openModal();
+  }
+});
+
+setupOpen.addEventListener('click', function () {
+  openModal();
+});
+
+setupClose.addEventListener('click', function() {
+  closeModal();
+});
+
+// Изменение цвета
+const changeColor = (colors, element, input, prop) => {
+  let bg = colors[getRandom(0, colors.length - 1)];
+  element.setAttribute(`style`, `${prop}: ${bg}`);
+  input.value = bg;
+};
+
+setupWizardCoatColor.addEventListener('click', function () {
+  changeColor(COATS_COLOR_WIZARDS, setupWizardCoatColor, inputCoatColor, `fill`);
+});
+
+setupWizardEyesColor.addEventListener('click', function () {
+  changeColor(EYES_COLOR_WIZARDS, setupWizardEyesColor, inputEyesColor, `fill`);
+});
+
+setupWizardFireballColor.addEventListener('click', function () {
+  changeColor(FIREBALL_COLOR_WIZARDS, setupWizardFireballColor, inputFireballColor, `background`);
+});
+
 document.querySelector('.setup-similar').classList.remove('hidden');
 
