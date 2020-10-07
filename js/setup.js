@@ -59,7 +59,6 @@ const similarWizardTemplate = document.querySelector('#similar-wizard-template')
 const setupSimilarList = document.querySelector('.setup-similar-list');
 const setup = document.querySelector('.setup');
 const setupOpen = document.querySelector('.setup-open');
-const setupOpenIcon = setupOpen.querySelector('.setup-open-icon');
 const setupClose = setup.querySelector('.setup-close');
 const setupWizardCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
 const setupWizardEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
@@ -139,7 +138,7 @@ const onKeyPressEscape = (evt) => {
 };
 
 document.addEventListener('keydown', function(evt) {
-  if (evt.key === Keys.ENTER_KEY && evt.target === setupOpenIcon) {
+  if (evt.key === Keys.ENTER_KEY && evt.target.classList.contains('setup-open-icon')) {
     openModal();
   }
 });
