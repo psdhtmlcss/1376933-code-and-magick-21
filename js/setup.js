@@ -47,6 +47,11 @@ const FIREBALL_COLOR_WIZARDS = [
   '#e6e848'
 ];
 
+const Keys = {
+  ENTER_KEY: 'Enter',
+  ESCAPE_KEY: 'Escape'
+};
+
 const MAX_COUNT = 4;
 const similarWizards = [];
 const wizardsFragment = document.createDocumentFragment();
@@ -55,7 +60,6 @@ const setupSimilarList = document.querySelector('.setup-similar-list');
 const setup = document.querySelector('.setup');
 const setupOpen = document.querySelector('.setup-open');
 const setupOpenIcon = setupOpen.querySelector('.setup-open-icon');
-const setupUserName = setup.querySelector('.setup-user-name');
 const setupClose = setup.querySelector('.setup-close');
 const setupWizardCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
 const setupWizardEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
@@ -121,21 +125,21 @@ const closeModal = () => {
 };
 
 const onKeyPressEnter = (evt) => {
-  if (evt.key === 'Enter' && evt.target === setupClose) {
+  if (evt.key === Keys.ENTER_KEY && evt.target.classList.contains('setup-close')) {
     evt.preventDefault();
     closeModal();
   }
 };
 
 const onKeyPressEscape = (evt) => {
-  if (evt.key === 'Escape' && evt.target !== setupUserName) {
+  if (evt.key === Keys.ESCAPE_KEY && !evt.target.classList.contains('setup-user-name')) {
     evt.preventDefault();
     closeModal();
   }
 };
 
 document.addEventListener('keydown', function(evt) {
-  if (evt.key === 'Enter' && evt.target === setupOpenIcon) {
+  if (evt.key === Keys.ENTER_KEY && evt.target === setupOpenIcon) {
     openModal();
   }
 });
@@ -151,7 +155,7 @@ setupClose.addEventListener('click', function() {
 // Изменение цвета
 const changeColor = (colors, element, input, prop) => {
   let bg = colors[getRandom(0, colors.length - 1)];
-  element.setAttribute(`style`, `${prop}: ${bg}`);
+  element.style[prop] = bg;
   input.value = bg;
 };
 
